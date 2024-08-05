@@ -2,8 +2,6 @@
 
 This project was created using [Flutter](https://flutter.dev) and contains a barebones mobile application that integrates with Veriph.One's native SDK. It showcases a simple phone number capture flow.
 
-> Note: This example is currently limited to Android. iOS integration coming soon.
-
 ## Getting Started
 
 1. Ensure you have gone through the developer documentation to understand how to integrate phone-based verification to your web app. Developer docs can be found [here](https://developer.veriph.one/docs/intro).
@@ -11,6 +9,8 @@ This project was created using [Flutter](https://flutter.dev) and contains a bar
 2. This is sample code with an incomplete implementation, it is limited to show how to integrate the native Veriph.One SDK into your Flutter projects. As such, you can run the project as is and the verification flow will show an error screen due to a lack of an API Key and session UUID (see `lib/main.dart`). The session UUID must be obtained from your server's API by leveraging your Start and Result endpoints.
 
 3. Regarding your API Key, there are several ways of securely feeding it to the SDK; you can use a Remote Secret manager or some mechanism that ensures your information is secure. IMPORTANT: never commit your API Keys to your repositories, doing so can expose you to data leaks and unexpected charges.
+
+> Note: To run this project on an iOS device, you must select a development team in Xcode.
 
 ## Implement the SDK in your own app
 
@@ -93,6 +93,81 @@ At this point, you can go back to the IDE of your preference for Flutter develop
    ```
 
 6. Use this code samples to connect to your Start and Result endpoint calls to finish the integration.
+
+### iOS
+
+You need to start in Xcode, where you will install our SDK via Swift Package Manager. Open the `Runner.xcworkspace` inside your `/ios` folder and follow these instructions.
+
+> Note: We use the default naming convention for a Flutter project. Keep this in mind if you have renamed your workspace.
+
+1. In your Xcode project go to Targets, select your target and search for _Frameworks, Libraries and Embedded Content_ in the General tab.
+2. Press the '+' button, click _Add other_ and then _Add Package Dependency_.
+3. Enter the package URL [https://github.com/Veriph-One/veriph-one-sdk-ios](https://github.com/Veriph-One/veriph-one-sdk-ios) in the search field.
+4. Once it loads, select your dependency rule and click on the _Add Package_ button. Please refer to the [package's URL](https://github.com/Veriph-One/veriph-one-sdk-ios) for detailed information about available versions, including the latest release.
+5. In case a confirmation prompt appears, click on the _Add Package_ button again.
+6. Using this example's `ios/Runner/AppDelegate.swift` file, copy or merge the provided code with your own to set up the channel handler for the Veriph.One SDK. This will enable the native side to handle method calls from the Flutter application.
+
+At this point, you can go back to the IDE of your preference for Flutter development.
+
+7. Create a MethodChannel to bind the SDK to your Flutter code using `lib/src/channel/veriph_one_channel.dart` as an example:
+
+   ```dart
+   import 'package:flutter/services.dart';
+
+   class VeriphOneChannel {
+   static const platform = MethodChannel('one.veriph.sdk/verification');
+
+   static Future<String?> subscribeToVerificationEvent(String apiKey, String sessionUuid) async {
+         try {
+            return await platform
+               .invokeMethod<String?>('startVerification', <String, String>{
+            'apiKey': apiKey,
+            'sessionUuid': sessionUuid,
+            });
+         } on PlatformException {
+            return null;
+         }
+      }
+   }
+   ```
+
+8. Take a look at `lib/main.dart` lines 47 to 67 to understand how to call the SDK from your Flutter code and subscribe to a result notification using the MethodChannel you created in the previous step.
+
+   ```dart
+   ElevatedButton(
+      onPressed: () {
+         // Under normal conditions, you wouldn't call the SDK first. You should make a call to your
+         // server's Start Endpoint (https://developer.veriph.one/docs/server/start-endpoint), then
+         // obtain a Session UUID and finally call the SDK using the code below.
+         // As part of that request, you can also pass additional data to your server: like the
+         // current locale, so the verification flow is kept in the same language; or a transaction
+         // ID to identify the operation.
+         VeriphOneChannel.subscribeToVerificationEvent(
+               "YOUR API KEY GOES HERE", "YOUR SESSION UUID GOES HERE")
+            .then((result) => {
+                  if (result == null)
+                     {
+                     // The flow was interrupted by the user or finished unsuccessfully
+                     showMessage(
+                           context,
+                           "Verification failed or was interrupted!",
+                           true)
+                     }
+                  else
+                     {
+                     // Ask your server via a request to the Result Endpoint for a result and
+                     // instructions on what to do next. Remember, the SDK won't give you the
+                     // result outright to ensure data can't be tampered.
+                     showMessage(context,
+                           "Verification was successful! 🎉🎉", false)
+                     }
+               });
+      },
+      child: const Text('Start verification flow'),
+   )
+   ```
+
+9. Use this code samples to connect to your Start and Result endpoint calls to finish the integration.
 
 ## Need support? Want more examples?
 
