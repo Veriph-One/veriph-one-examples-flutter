@@ -82,11 +82,17 @@ Use the IDE of your preference for Flutter development to add these files:
 
 We recommend you perform this process in Android Studio, which helps with the upgrade. Open your `/android` folder as a project and follow these instructions.
 
-1. Go to this project's `android/app/build.gradle` and copy lines 31 to 38 to replace them with your app's Android gradle file (same path). Do the same process with lines 60 to 62 and ensure you are using the latest version of our SDK (e.g., `implementation("one.veriph:veriph-one-android-sdk:1.0.10-kotlin1_9-rc1")`). Make sure you are using a version targeting Kotlin 1.9.
+1. (Recommended) Run Android Studio's AGP upgrade assistant if prompted by it. As of this writing, Flutter uses AGP 7.3.0 and might be incompatible with some of the latest Jetpack Compose dependencies.
 
-2. (Recommended) Run Android Studio's AGP upgrade assistant if prompted by it. As of this writing, Flutter uses AGP 7.3.0 and might be incompatible with some of the latest Jetpack Compose dependencies.
+2. Go to this project's `android/app/build.gradle` and copy lines 31 to 37 (`compileOptions` and `kotlinOptions`) to ensure the ones in your app's Android gradle file (same path) match them. Do the same process with lines 59 to 61 and ensure you are using the latest version of our SDK (e.g., `implementation("one.veriph:veriph-one-android-sdk:1.0.10")`).
 
-3. Using this example's `android/app/src/main/kotlin/com/example/veriph_one_flutter_integration/MainActivity.kt` file, copy its code or merge it with your own to create the native binding to the Veriph.One SDK. Important: note that we use `FlutterFragmentActivity` instead of the traditional `FlutterActivity`; the latter is missing some key features needed for the SDK's lifecycle.
+3. Add lines 8-11 from this project's `/android/build.gradle` to your app's project level gradle file (same path) to ensure you are using the correct minimum Kotlin version.
+
+4. In your `/android/settings.gradle` file, add line 22 (`id "org.jetbrains.kotlin.android" version "1.9.0" apply false`) from this project's same file to your list of plugins.
+
+5. Go to your `/android/gradle/wrapper/gradle-wrapper.properties` file and make sure you are running a newer version of the gradle plugin by updating the `distributionUrl` to `distributionUrl=https\://services.gradle.org/distributions/gradle-8.10-bin.zip`. Then execute a gradle sync to ensure everything is working properly.
+
+6. Using this example's `android/app/src/main/kotlin/com/example/veriph_one_flutter_integration/MainActivity.kt` file, copy its code or merge it with your own to create the native binding to the Veriph.One SDK. Important: note that we use `FlutterFragmentActivity` instead of the traditional `FlutterActivity`; the latter is missing some key features needed for the SDK's lifecycle.
 
 ### Testing your integration
 After you have finalized the integration of each platform you'll use, go back to the IDE you use for Flutter development and use the code samples to connect your Start and Result endpoint calls to finish the integration.

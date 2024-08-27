@@ -82,7 +82,7 @@ Use the IDE of your preference for Flutter development to add these files:
 
 We recommend you perform this process in Android Studio, which helps with the upgrade. Open your `/android` folder as a project and follow these instructions.
 
-1. Go to this project's `android/app/build.gradle` and copy lines 31 to 38 to replace them with your app's Android gradle file (same path). Do the same process with lines 60 to 62 and ensure you are using the latest version of our SDK (e.g., `implementation("one.veriph:veriph-one-android-sdk:1.0.10")`).
+1. Go to this project's `android/app/build.gradle` and copy lines 31 to 38 to replace the ones in your app's Android gradle file (same path). Do the same process with lines 60 to 62 and ensure you are using the latest version of our SDK (e.g., `implementation("one.veriph:veriph-one-android-sdk:1.0.10")`).
 
 2. If your app uses Kotlin 2.0.0 or higher, skip this step. Otherwise, you'll need to update your dependencies as follows:
 
