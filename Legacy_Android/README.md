@@ -10,8 +10,6 @@ This project was created using [Flutter](https://flutter.dev) and contains a bar
 
 3. Regarding your API Key, there are several ways of securely feeding it to the SDK; you can use a Remote Secret manager or some mechanism that ensures your information is secure. IMPORTANT: never commit your API Keys to your repositories; doing so can expose you to data leaks and unexpected charges.
 
-> Note: To run this project on an iOS device, you must select a development team in Xcode.
-
 ## Implement the SDK in your own app
 
 Ready to integrate the Veriph.One SDK into your app? First, you'll need to create a Method Channel on your Flutter code and then perform the setup for each platform you are working with:
