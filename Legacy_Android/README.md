@@ -82,11 +82,9 @@ We recommend you perform this process in Android Studio, which helps with the up
 
 1. Go to this project's `android/app/build.gradle` and copy lines 42 to 44 and ensure you are using the latest version of our SDK (e.g., `implementation("one.veriph:veriph-one-android-sdk:1.0.10")`).
 
-3. Add lines 8-11 from this project's `/android/build.gradle` to your app's project level gradle file (same path) to ensure you are using the correct minimum Kotlin version.
+2. Execute a gradle sync to ensure everything is working properly.
 
-5. Execute a gradle sync to ensure everything is working properly.
-
-6. Using this example's `android/app/src/main/kotlin/com/example/veriph_one_legacy_android/MainActivity.kt` file, copy its code or merge it with your own to create the native binding to the Veriph.One SDK. Important: note that we use `FlutterFragmentActivity` instead of the traditional `FlutterActivity`; the latter is missing some key features needed for the SDK's lifecycle.
+3. Using this example's `android/app/src/main/kotlin/com/example/veriph_one_legacy_android/MainActivity.kt` file, copy its code or merge it with your own to create the native binding to the Veriph.One SDK. Important: note that we use `FlutterFragmentActivity` instead of the traditional `FlutterActivity`; the latter is missing some key features needed for the SDK's lifecycle.
 
 ### Testing your integration
 After you have finalized the integration of each platform you'll use, go back to the IDE you use for Flutter development and use the code samples to connect your Start and Result endpoint calls to finish the integration.
